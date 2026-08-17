@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Stephanie Villela — AI Engineer @ ASML</title>
 <meta name="description" content="AI Engineer at ASML building agentic AI systems, GPU-native scientific computing pipelines, and autonomous agents.">
+
+<!-- Social preview -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Stephanie Villela — AI Engineer @ ASML">
+<meta property="og:description" content="Agentic pipelines, GPU-native scientific computing, and autonomous systems — from materials chemistry to trading.">
+<meta property="og:image" content="https://portfolio-villelas-projects.vercel.app/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://portfolio-villelas-projects.vercel.app">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stephanie Villela — AI Engineer @ ASML">
+<meta name="twitter:description" content="Agentic pipelines, GPU-native scientific computing, and autonomous systems — from materials chemistry to trading.">
+<meta name="twitter:image" content="https://portfolio-villelas-projects.vercel.app/og-image.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -741,6 +754,7 @@
         <li><a href="#contact">Contact</a></li>
       </ul>
       <span class="cmdk-hint" id="cmdk-trigger">Search <kbd>⌘K</kbd></span>
+      <a class="cmdk-hint" href="resume.pdf" download="Stephanie_Villela_Resume.pdf" style="color:var(--plasma-amber); border-color:rgba(255,169,77,0.35);">Resume ↓</a>
     </nav>
   </div>
 </header>
@@ -777,9 +791,9 @@
     </div>
 
     <div class="cta-row">
-      <a class="btn btn-primary" href="mailto:stephanie.villelap1@gmail.com">Get in touch</a>
+      <a class="btn btn-primary" href="resume.pdf" download="Stephanie_Villela_Resume.pdf">Download Resume ↓</a>
+      <a class="btn btn-ghost" href="mailto:stephanie.villelap1@gmail.com">Get in touch</a>
       <a class="btn btn-ghost" href="https://www.linkedin.com/in/sv-35606427b" target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a class="btn btn-ghost" href="#experience">View work</a>
     </div>
 
     <div class="scroll-cue" aria-hidden="true"></div>
@@ -1123,6 +1137,7 @@
     { label: 'Contact', key: 'section', action: () => scrollToId('contact') },
     { label: 'Email Stephanie', key: 'action', action: () => window.location.href = 'mailto:stephanie.villelap1@gmail.com' },
     { label: 'Open LinkedIn', key: 'link', action: () => window.open('https://www.linkedin.com/in/sv-35606427b', '_blank') },
+    { label: 'Download Resume', key: 'action', action: () => { const a = document.createElement('a'); a.href = 'resume.pdf'; a.download = 'Stephanie_Villela_Resume.pdf'; a.click(); } },
   ];
 
   function scrollToId(id){
