@@ -507,8 +507,189 @@
     position:relative; z-index:2;
   }
 
+  /* ---------- Boot sequence ---------- */
+  #boot{
+    position:fixed; inset:0; z-index:200;
+    background:var(--deep-field);
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .6s ease, visibility .6s ease;
+  }
+  #boot.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+  #boot .boot-box{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.92rem;
+    color:var(--signal-cyan);
+    width:min(420px, 84vw);
+  }
+  #boot .boot-line{
+    opacity:0;
+    margin-bottom:9px;
+    display:flex; align-items:center; gap:10px;
+  }
+  #boot .boot-line.show{ opacity:1; }
+  #boot .boot-line .ok{ color:var(--plasma-amber); }
+  #boot .boot-bar{
+    height:2px; width:100%;
+    background:rgba(255,255,255,0.08);
+    margin-top:16px;
+    border-radius:2px;
+    overflow:hidden;
+  }
+  #boot .boot-bar-fill{
+    height:100%; width:0%;
+    background:linear-gradient(90deg, var(--plasma-amber), var(--ion-violet), var(--signal-cyan));
+    transition:width 1.6s cubic-bezier(.22,.61,.36,1);
+  }
+  #boot .cursor-blink{
+    display:inline-block; width:7px; height:14px;
+    background:var(--signal-cyan);
+    animation:blink 1s step-end infinite;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  /* ---------- Top pipeline progress ---------- */
+  #pipeline-progress{
+    position:fixed; top:0; left:0; height:2px; width:0%;
+    z-index:60;
+    background:linear-gradient(90deg, var(--plasma-amber), var(--ion-violet), var(--signal-cyan));
+    transition:width .1s linear;
+  }
+
+  /* ---------- Custom cursor ---------- */
+  .cursor-dot, .cursor-ring{
+    position:fixed; top:0; left:0; z-index:300;
+    pointer-events:none;
+    border-radius:50%;
+    transform:translate(-50%,-50%);
+  }
+  .cursor-dot{
+    width:6px; height:6px;
+    background:var(--plasma-amber);
+    transition:transform .12s ease;
+  }
+  .cursor-ring{
+    width:34px; height:34px;
+    border:1px solid rgba(255,169,77,0.55);
+    transition:width .25s ease, height .25s ease, border-color .25s ease, transform .18s ease-out, background .25s ease;
+  }
+  .cursor-ring.magnet{
+    width:58px; height:58px;
+    background:rgba(255,169,77,0.08);
+    border-color:var(--ion-violet);
+  }
+  body.has-custom-cursor, body.has-custom-cursor a, body.has-custom-cursor button{
+    cursor:none;
+  }
+
+  /* ---------- Agent log ticker ---------- */
+  .ticker-wrap{
+    position:relative; z-index:2;
+    border-top:1px solid rgba(255,255,255,0.07);
+    border-bottom:1px solid rgba(255,255,255,0.07);
+    background:rgba(255,255,255,0.02);
+    overflow:hidden;
+    padding:13px 0;
+  }
+  .ticker-track{
+    display:flex;
+    white-space:nowrap;
+    animation:ticker 38s linear infinite;
+    width:max-content;
+  }
+  .ticker-track span{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.78rem;
+    color:var(--muted);
+    padding:0 34px;
+    border-right:1px solid rgba(255,255,255,0.09);
+  }
+  .ticker-track span .tag{ color:var(--signal-cyan); }
+  .ticker-track span .ok{ color:var(--plasma-amber); }
+  @keyframes ticker{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+
+  /* ---------- Command palette ---------- */
+  .cmdk-hint{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.76rem;
+    color:var(--muted);
+    background:var(--panel-bg);
+    border:1px solid var(--panel-border);
+    padding:6px 12px;
+    border-radius:100px;
+    cursor:pointer;
+    display:inline-flex; align-items:center; gap:6px;
+    transition:border-color .25s ease, color .25s ease;
+  }
+  .cmdk-hint:hover{ border-color:var(--signal-cyan); color:var(--ink); }
+  .cmdk-hint kbd{
+    font-family:'JetBrains Mono',monospace;
+    background:rgba(255,255,255,0.08);
+    padding:1px 6px;
+    border-radius:4px;
+    font-size:0.7rem;
+  }
+  @media (max-width:640px){ .cmdk-hint{ display:none; } }
+
+  #cmdk-overlay{
+    position:fixed; inset:0; z-index:250;
+    background:rgba(6,8,14,0.72);
+    backdrop-filter:blur(6px);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding-top:14vh;
+    opacity:0; visibility:hidden;
+    transition:opacity .2s ease, visibility .2s ease;
+  }
+  #cmdk-overlay.open{ opacity:1; visibility:visible; }
+  #cmdk-panel{
+    width:min(520px, 90vw);
+    border-radius:16px;
+    overflow:hidden;
+    transform:translateY(-10px);
+    transition:transform .25s ease;
+  }
+  #cmdk-overlay.open #cmdk-panel{ transform:translateY(0); }
+  #cmdk-input{
+    width:100%;
+    background:transparent;
+    border:none;
+    border-bottom:1px solid var(--panel-border);
+    padding:18px 20px;
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.95rem;
+    color:var(--ink);
+    outline:none;
+  }
+  #cmdk-input::placeholder{ color:var(--muted-2); }
+  #cmdk-list{ max-height:320px; overflow-y:auto; padding:8px; }
+  .cmdk-item{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 14px;
+    border-radius:10px;
+    font-size:0.9rem;
+    cursor:pointer;
+    color:var(--muted);
+    transition:background .15s ease, color .15s ease;
+  }
+  .cmdk-item .cmdk-key{
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.72rem;
+    color:var(--muted-2);
+  }
+  .cmdk-item.active{
+    background:rgba(255,169,77,0.1);
+    color:var(--ink);
+  }
+  .cmdk-item.active .cmdk-key{ color:var(--plasma-amber); }
+
+  /* ---------- 3D tilt ---------- */
+  .project-card{ will-change:transform; }
+
   @media (prefers-reduced-motion: reduce){
     *{ animation-duration:0.001s !important; animation-iteration-count:1 !important; transition-duration:0.001s !important; scroll-behavior:auto !important; }
+    #boot{ display:none !important; }
   }
 
   @media (max-width:640px){
@@ -516,10 +697,30 @@
     .hero{ padding-top:120px; }
     .timeline{ padding-left:28px; }
     .role-node{ left:-28px; }
+    .cursor-dot, .cursor-ring{ display:none; }
+  }
+
+  @media (pointer:coarse){
+    .cursor-dot, .cursor-ring{ display:none; }
   }
 </style>
 </head>
 <body>
+
+<div id="boot" aria-hidden="true">
+  <div class="boot-box">
+    <div class="boot-line" data-line>&gt; agent.init --profile stephanie_villela</div>
+    <div class="boot-line" data-line>&gt; loading models <span class="ok">[MACE, TensorNet, XGBoost]</span> ... done</div>
+    <div class="boot-line" data-line>&gt; connecting pipelines <span class="ok">[ALCHEMI, Databricks, Claude API]</span> ... done</div>
+    <div class="boot-line" data-line>&gt; status: <span class="ok">READY</span><span class="cursor-blink"></span></div>
+    <div class="boot-bar"><div class="boot-bar-fill" id="boot-bar-fill"></div></div>
+  </div>
+</div>
+
+<div id="pipeline-progress"></div>
+
+<div class="cursor-dot" id="cursor-dot"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
 
 <div class="ambient">
   <div class="blob blob-1"></div>
@@ -531,7 +732,7 @@
 <header>
   <div class="nav-inner">
     <div class="logo">SV<span>.</span></div>
-    <nav>
+    <nav style="display:flex; align-items:center; gap:22px;">
       <ul>
         <li><a href="#about">About</a></li>
         <li><a href="#experience">Experience</a></li>
@@ -539,9 +740,17 @@
         <li><a href="#skills">Skills</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
+      <span class="cmdk-hint" id="cmdk-trigger">Search <kbd>⌘K</kbd></span>
     </nav>
   </div>
 </header>
+
+<div id="cmdk-overlay">
+  <div id="cmdk-panel" class="glass">
+    <input id="cmdk-input" type="text" placeholder="Jump to a section, or say hi..." autocomplete="off">
+    <div id="cmdk-list"></div>
+  </div>
+</div>
 
 <main>
 
@@ -575,6 +784,21 @@
 
     <div class="scroll-cue" aria-hidden="true"></div>
   </section>
+
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-track">
+      <span><span class="tag">agent.materials_screen</span> — benchmarking MACE / TensorNet across 2,000 candidates — <span class="ok">complete</span></span>
+      <span><span class="tag">agent.kpi_retrieval</span> — query: fab_machine_014 — lineage resolved, 3 anomalies flagged</span>
+      <span><span class="tag">agent.trading</span> — MCP connection: Robinhood — monitoring 12 tickers — <span class="ok">live</span></span>
+      <span><span class="tag">agent.sem_defect</span> — XGBoost inference on orifice batch #482 — <span class="ok">0 critical</span></span>
+      <span><span class="tag">agent.forecast</span> — Prophet model retrained on 12mo cluster usage — deployed to Databricks App</span>
+      <span><span class="tag">agent.materials_screen</span> — benchmarking MACE / TensorNet across 2,000 candidates — <span class="ok">complete</span></span>
+      <span><span class="tag">agent.kpi_retrieval</span> — query: fab_machine_014 — lineage resolved, 3 anomalies flagged</span>
+      <span><span class="tag">agent.trading</span> — MCP connection: Robinhood — monitoring 12 tickers — <span class="ok">live</span></span>
+      <span><span class="tag">agent.sem_defect</span> — XGBoost inference on orifice batch #482 — <span class="ok">0 critical</span></span>
+      <span><span class="tag">agent.forecast</span> — Prophet model retrained on 12mo cluster usage — deployed to Databricks App</span>
+    </div>
+  </div>
 
   <section id="about">
     <div class="wrap">
@@ -814,13 +1038,139 @@
   }
   window.addEventListener('resize', updateProgress);
 
-  // Project card cursor-follow glow
+  // Project card cursor-follow glow + 3D tilt
   document.querySelectorAll('.project-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
-      card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
-      card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+      const px = (e.clientX - rect.left) / rect.width;
+      const py = (e.clientY - rect.top) / rect.height;
+      card.style.setProperty('--mx', (px * 100) + '%');
+      card.style.setProperty('--my', (py * 100) + '%');
+      const tiltX = (py - 0.5) * -8;
+      const tiltY = (px - 0.5) * 10;
+      card.style.transform = `translateY(-6px) perspective(700px) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
     });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+    });
+  });
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---------- Boot sequence ----------
+  const boot = document.getElementById('boot');
+  const bootLines = document.querySelectorAll('#boot [data-line]');
+  const bootBar = document.getElementById('boot-bar-fill');
+
+  function runBoot(){
+    if(reduceMotion){ boot.classList.add('hidden'); return; }
+    bootLines.forEach((line, i) => {
+      setTimeout(() => line.classList.add('show'), 180 + i * 260);
+    });
+    requestAnimationFrame(() => { bootBar.style.width = '100%'; });
+    setTimeout(() => { boot.classList.add('hidden'); }, 1700);
+  }
+  runBoot();
+
+  // ---------- Top pipeline progress bar ----------
+  const pipelineBar = document.getElementById('pipeline-progress');
+  function updatePipelineBar(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    pipelineBar.style.width = pct + '%';
+  }
+  window.addEventListener('scroll', updatePipelineBar, { passive: true });
+  updatePipelineBar();
+
+  // ---------- Custom cursor ----------
+  const isFinePointer = window.matchMedia('(pointer:fine)').matches;
+  if(isFinePointer && !reduceMotion){
+    document.body.classList.add('has-custom-cursor');
+    const dot = document.getElementById('cursor-dot');
+    const ring = document.getElementById('cursor-ring');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    window.addEventListener('mousemove', (e) => {
+      mx = e.clientX; my = e.clientY;
+      dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    });
+    function ringLoop(){
+      rx += (mx - rx) * 0.18;
+      ry += (my - ry) * 0.18;
+      ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+      requestAnimationFrame(ringLoop);
+    }
+    ringLoop();
+
+    document.querySelectorAll('a, button, .project-card, .pill, .cmdk-hint').forEach(el => {
+      el.addEventListener('mouseenter', () => ring.classList.add('magnet'));
+      el.addEventListener('mouseleave', () => ring.classList.remove('magnet'));
+    });
+  }
+
+  // ---------- Command palette ----------
+  const cmdOverlay = document.getElementById('cmdk-overlay');
+  const cmdInput = document.getElementById('cmdk-input');
+  const cmdList = document.getElementById('cmdk-list');
+  const cmdTrigger = document.getElementById('cmdk-trigger');
+
+  const commands = [
+    { label: 'About', key: 'section', action: () => scrollToId('about') },
+    { label: 'Experience', key: 'section', action: () => scrollToId('experience') },
+    { label: 'Projects', key: 'section', action: () => scrollToId('projects') },
+    { label: 'Skills', key: 'section', action: () => scrollToId('skills') },
+    { label: 'Education', key: 'section', action: () => scrollToId('education') },
+    { label: 'Contact', key: 'section', action: () => scrollToId('contact') },
+    { label: 'Email Stephanie', key: 'action', action: () => window.location.href = 'mailto:stephanie.villelap1@gmail.com' },
+    { label: 'Open LinkedIn', key: 'link', action: () => window.open('https://www.linkedin.com/in/sv-35606427b', '_blank') },
+  ];
+
+  function scrollToId(id){
+    document.getElementById(id).scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+  }
+
+  let activeIndex = 0;
+  function renderCmdList(filter){
+    const filtered = commands.filter(c => c.label.toLowerCase().includes(filter.toLowerCase()));
+    cmdList.innerHTML = '';
+    filtered.forEach((c, i) => {
+      const item = document.createElement('div');
+      item.className = 'cmdk-item' + (i === activeIndex ? ' active' : '');
+      item.innerHTML = `<span>${c.label}</span><span class="cmdk-key">${c.key}</span>`;
+      item.addEventListener('click', () => { c.action(); closeCmdk(); });
+      cmdList.appendChild(item);
+    });
+    cmdList._filtered = filtered;
+  }
+
+  function openCmdk(){
+    cmdOverlay.classList.add('open');
+    cmdInput.value = '';
+    activeIndex = 0;
+    renderCmdList('');
+    setTimeout(() => cmdInput.focus(), 60);
+  }
+  function closeCmdk(){
+    cmdOverlay.classList.remove('open');
+  }
+
+  cmdTrigger.addEventListener('click', openCmdk);
+  cmdOverlay.addEventListener('click', (e) => { if(e.target === cmdOverlay) closeCmdk(); });
+
+  cmdInput.addEventListener('input', () => { activeIndex = 0; renderCmdList(cmdInput.value); });
+  cmdInput.addEventListener('keydown', (e) => {
+    const items = cmdList._filtered || [];
+    if(e.key === 'ArrowDown'){ e.preventDefault(); activeIndex = Math.min(activeIndex + 1, items.length - 1); renderCmdList(cmdInput.value); }
+    if(e.key === 'ArrowUp'){ e.preventDefault(); activeIndex = Math.max(activeIndex - 1, 0); renderCmdList(cmdInput.value); }
+    if(e.key === 'Enter' && items[activeIndex]){ items[activeIndex].action(); closeCmdk(); }
+    if(e.key === 'Escape'){ closeCmdk(); }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k'){
+      e.preventDefault();
+      cmdOverlay.classList.contains('open') ? closeCmdk() : openCmdk();
+    }
   });
 </script>
 
